@@ -8,8 +8,8 @@
       <v-card :elevation="0" style="background-color: #f3f0f0">
         <v-tabs v-model="tab" align-tabs="end">
           <v-tab to="/" class="tab" :value="1">INICIO</v-tab>
-          <v-tab class="tab" :value="2">CATEGORIAS</v-tab>
-          <v-tab class="tab" :value="3">TIENDA</v-tab>
+          <v-tab to="categories" class="tab" :value="2">CATEGORIAS</v-tab>
+          <v-tab to="store" class="tab" :value="3">TIENDA</v-tab>
           <v-tab to="contact" class="tab" :value="4">CONTACTO</v-tab>
         </v-tabs>
       </v-card>
@@ -20,12 +20,10 @@
 </template>
 
 <script>
-
 export default {
-  name: 'header_vue',
-
-  data: () => {},
-}
+  name: "header_vue",
+  data: () => ({}),
+};
 </script>
 
 <style>

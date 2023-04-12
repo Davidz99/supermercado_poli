@@ -22,7 +22,7 @@
           <br />
         </p>
 
-        <v-btn style="color: green !important"> COMPRAR AHORA </v-btn>
+        <v-btn to="store" style="color: green !important"> COMPRAR AHORA </v-btn>
       </v-col>
 
       <v-col cols="3">
