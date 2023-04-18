@@ -1,11 +1,16 @@
+<style scoped>
+  .producto{
+    text-align: center;
+  }
+</style>
 <template>
   <v-card style="overflow-y: auto !important" variant="text" elevation="0" max-height="500">
 
-    <h2 align="center" class="ma-5" style="color: green">TIENDA</h2>
+    <h2 align="center" class="ma-5" style="color: green padding: 7px background-color: white">Supermercado</h2>
 
     <v-row class="mt-n6 pa-5" id="contenedor_productos">
       <v-col v-for="fila in array_productos" :key="fila" cols="2" class="vino">
-        <v-card border style="font-size: 10px" class="mb-2" density="compact" variant="text" elevation="3">
+        <v-card border style="font-size: 10px" class="mb-2 producto" density="compact" variant="text" elevation="3">
           <v-img :src="require(`@/assets/${fila.img}`)" height="140"></v-img>
 
           <v-card-title style="font-size: 14px"> {{ fila.title }} </v-card-title>
@@ -30,7 +35,7 @@ export default {
     // productos base de datos
     array_productos: [
     { title: "VINO SABROSO", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
-      { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
+      { title: "VINO CASA BLANCA", price: "$120,000", img: "vino_casa_blanca.png", category: "vino" },
       { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino"},
       { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
       { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
