@@ -36,7 +36,7 @@ export default {
     array_productos: [
     { title: "VINO SABROSO", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
       { title: "VINO CASA BLANCA", price: "$120,000", img: "vino_casa_blanca.png", category: "vino" },
-      { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino"},
+      { title: "VINO SIETE SOLES", price: "$200,000", img: "vino_siete_soles.jpg", category: "vino"},
       { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
       { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
       { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino"},
