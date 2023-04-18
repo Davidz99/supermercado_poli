@@ -43,7 +43,7 @@ export default {
       { title: "ACEITE PREMIER", price: "$48,990", img: "aceite_premier.png", category: "despensa" },
     ],
   }),
+  
 
- 
 };
 </script>
