@@ -6,7 +6,7 @@
 <template>
   <v-card style="overflow-y: auto !important" variant="text" elevation="0" max-height="500">
 
-    <h2 align="center" class="ma-5" style="color: green padding: 7px background-color: white">Supermercado</h2>
+    <h2 align="center" class="ma-5" style="color: green padding: 7px background-color: white">Productos</h2>
 
     <v-row class="mt-n6 pa-5" id="contenedor_productos">
       <v-col v-for="fila in array_productos" :key="fila" cols="2" class="vino">
@@ -34,15 +34,15 @@ export default {
 
     // productos base de datos
     array_productos: [
-    { title: "VINO SABROSO", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
+    { title: "VINO LABRUSCO", price: "$500,000", img: "vino_tinto_labrusco.jpg", category: "vino" },
       { title: "VINO CASA BLANCA", price: "$120,000", img: "vino_casa_blanca.png", category: "vino" },
-      { title: "VINO SIETE SOLES", price: "$200,000", img: "vino_siete_soles.jpg", category: "vino"},
+      { title: "VINO SIETE SOLES", price: "$1.250,000", img: "vino_siete_soles.jpg", category: "vino"},
+      { title: "VINO 120", price: "$100,000", img: "vino_120.jpg", category: "vino" },
       { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
-      { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
-      { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino"},
-      { title: "VINO CASA BLANCA", price: "$170,000", img: "vino_casa_blanca.png", category: "vino" },
-      { title: "VINO CASA BLANCA", price: "$170,000", img: "vino_casa_blanca.png", category: "vino" },
-      { title: "ARROZ DIANA", price: "$12,000", img: "arrozCatellano.png", category: "despensa" },
+      { title: "SUAVIZANTE", price: "$20,000", img: "suavizante.jpg", category: "aseo"},
+      { title: "CLORO", price: "$12,000", img: "cloro_magia_blanca.jpg", category: "aseo" },
+      { title: "DESINFECTANTE", price: "$10,000", img: "desinfectante_fabuloso_lavanda_galon.jpg", category: "aseo" },
+      { title: "JAVON", price: "$25,000", img: "javon_liquido.jpg", category: "aseo" },
       { title: "PASTA DORIA", price: "$5,000", img: "pasta_doria.png", category: "despensa" },
       { title: "AVENA QUAKER", price: "$10,700", img: "avena_quaker.png", category: "despensa" },
       { title: "ACEITE PREMIER", price: "$48,990", img: "aceite_premier.png", category: "despensa" },
