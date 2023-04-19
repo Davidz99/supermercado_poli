@@ -69,21 +69,26 @@
       <v-col
         v-for="fila in productosFiltrados"
         :key="fila"
-        cols="2"
+        cols="4"
         class="vino"
       >
         <v-card
           border
-          style="font-size: 20px"
+          style="font-size: 10px"
           class="mb-2"
           density="compact"
           variant="text"
           elevation="3"
-          @click="dialog = true"
         >
           <v-img :src="require(`@/assets/${fila.img}`)" height="140"></v-img>
 
-          <v-card-title style="font-size: 14px">
+          <v-card-title
+            style="font-size: 14px"
+            @click="
+              productoSeleccionado = fila;
+              dialog = true;
+            "
+          >
             {{ fila.title }}
           </v-card-title>
           <v-card-text style="font-size: 15pt"> {{ fila.price }} </v-card-text>
@@ -97,23 +102,24 @@
 
     <!--Es lo de v-dialog -->
     <v-dialog v-model="dialog">
-      <v-card>
-        <v-card-title>
-          {{ categoriaSeleccionada.toUpperCase() }}
-        </v-card-title>
+      <v-card max-width="400">
+        <v-card-title
+          border
+          style="font-size: 30px"
+          text-align="right"
+          class="mb-2"
+          density="compact"
+          variant="text"
+          elevation="3"
+          >{{ productoSeleccionado.title }}</v-card-title
+        >
+        <v-card-subtitle>{{ productoSeleccionado.price }}</v-card-subtitle>
         <v-card-text>
-          <v-row>
-            <v-col v-for="(producto, index) in productosFiltrados" :key="index">
-              <v-card>
-                <v-card-title>{{ producto.title }}</v-card-title>
-                <v-card-subtitle>{{ producto.price }}</v-card-subtitle>
-                <v-card-text>
-                  <v-img :src="require(`@/assets/${producto.img}`)" />
-                </v-card-text>
-              </v-card>
-            </v-col>
-          </v-row>
+          {{ productoSeleccionado.title }}
+          <v-img :src="require(`@/assets/${productoSeleccionado.img}`)" />
         </v-card-text>
+      </v-card>
+      <v-card>
         <!--Boton de cierre de dialog-->
         <v-card-actions>
           <v-btn color="primary" text @click="dialog = false"> Cerrar </v-btn>
@@ -134,79 +140,92 @@ export default {
     // productos base de datos
     array_productos: [
       {
+        id: 1,
         title: "VINO SABROSO",
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
       },
       {
+        id: 2,
         title: "VINO SANTA HELENA",
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
       },
       {
+        id: 3,
         title: "VINO SANTA HELENA",
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
       },
       {
+        id: 4,
         title: "VINO SANTA HELENA",
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
       },
       {
+        id: 5,
         title: "VINO SANTA HELENA",
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
       },
       {
+        id: 6,
         title: "VINO SANTA HELENA",
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
       },
       {
+        id: 7,
         title: "VINO CASA BLANCA",
         price: "$170,000",
         img: "vino_casa_blanca.png",
         category: "vino",
       },
       {
+        id: 8,
         title: "VINO CASA BLANCA",
         price: "$170,000",
         img: "vino_casa_blanca.png",
         category: "vino",
       },
       {
+        id: 9,
         title: "ARROZ DIANA",
         price: "$12,000",
         img: "arrozCatellano.png",
         category: "despensa",
-        descripcion: "El arroz es un producto bueno"
+        descripcion: "El arroz es un producto bueno",
       },
       {
+        id: 10,
         title: "PASTA DORIA",
         price: "$5,000",
         img: "pasta_doria.png",
         category: "despensa",
       },
       {
+        id: 11,
         title: "AVENA QUAKER",
         price: "$10,700",
         img: "avena_quaker.png",
         category: "despensa",
       },
       {
+        id: 12,
         title: "ACEITE PREMIER",
         price: "$48,990",
         img: "aceite_premier.png",
         category: "despensa",
       },
     ],
+    productoSeleccionado: {},
   }),
 
   computed: {
