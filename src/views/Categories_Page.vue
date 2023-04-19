@@ -80,19 +80,19 @@
           variant="text"
           elevation="3"
         >
-          <v-img :src="require(`@/assets/${fila.img}`)" height="140"></v-img>
-
-          <v-card-title
-            style="font-size: 14px"
+          <v-img
+            :src="require(`@/assets/${fila.img}`)"
+            height="140"
+            style="cursor: pointer;"
             @click="
               productoSeleccionado = fila;
               dialog = true;
             "
-          >
+          ></v-img>
+          <v-card-title style="font-size: 14px">
             {{ fila.title }}
           </v-card-title>
           <v-card-text style="font-size: 15pt"> {{ fila.price }} </v-card-text>
-
           <v-btn class="mt-n2" block color="green" variant="text"
             >AÑADIR AL CARRITO</v-btn
           >
@@ -100,29 +100,29 @@
       </v-col>
     </v-row>
 
-    <!--Es lo de v-dialog -->
-    <v-dialog v-model="dialog">
-      <v-card max-width="400">
-        <v-card-title
-          border
-          style="font-size: 30px"
-          text-align="right"
-          class="mb-2"
-          density="compact"
-          variant="text"
-          elevation="3"
-          >{{ productoSeleccionado.title }}</v-card-title
-        >
+    <!-- V-DIALOG DE CADA PRODUCTO -->
+    <v-dialog v-model="dialog" class="my-dialog">
+      <v-card class="my-card">
+        <v-card-title class="text-center">
+          {{ productoSeleccionado.title }}
+        </v-card-title>
         <v-card-subtitle>{{ productoSeleccionado.price }}</v-card-subtitle>
         <v-card-text>
-          {{ productoSeleccionado.title }}
-          <v-img :src="require(`@/assets/${productoSeleccionado.img}`)" />
+          <v-img
+            :src="require(`@/assets/${productoSeleccionado.img}`)"
+            width="300px"
+            height="200px"
+          />
+          {{ productoSeleccionado.description }}
         </v-card-text>
+        <v-btn class="mt-n2" block color="green" variant="text"
+          >AÑADIR AL CARRITO</v-btn
+        >
       </v-card>
-      <v-card>
+      <v-card height="10%">
         <!--Boton de cierre de dialog-->
         <v-card-actions>
-          <v-btn color="primary" text @click="dialog = false"> Cerrar </v-btn>
+          <v-btn color="red" text @click="dialog = false"> Cerrar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -145,6 +145,9 @@ export default {
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 2,
@@ -152,6 +155,9 @@ export default {
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 3,
@@ -159,6 +165,9 @@ export default {
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 4,
@@ -166,6 +175,9 @@ export default {
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 5,
@@ -173,6 +185,9 @@ export default {
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 6,
@@ -180,13 +195,19 @@ export default {
         price: "$200,000",
         img: "vino_santa_helena.png",
         category: "vino",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 7,
         title: "VINO CASA BLANCA",
         price: "$170,000",
         img: "vino_casa_blanca.png",
+        cant: 10,
         category: "vino",
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 8,
@@ -194,6 +215,9 @@ export default {
         price: "$170,000",
         img: "vino_casa_blanca.png",
         category: "vino",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 9,
@@ -201,7 +225,8 @@ export default {
         price: "$12,000",
         img: "arrozCatellano.png",
         category: "despensa",
-        descripcion: "El arroz es un producto bueno",
+        cant: 10,
+        description: "El arroz es un producto bueno",
       },
       {
         id: 10,
@@ -209,6 +234,9 @@ export default {
         price: "$5,000",
         img: "pasta_doria.png",
         category: "despensa",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 11,
@@ -216,6 +244,9 @@ export default {
         price: "$10,700",
         img: "avena_quaker.png",
         category: "despensa",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
       {
         id: 12,
@@ -223,6 +254,30 @@ export default {
         price: "$48,990",
         img: "aceite_premier.png",
         category: "despensa",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
+      },
+      {
+        id: 13,
+        title: "ACEITE PREMIER",
+        price: "$48,990",
+        img: "aceite_premier.png",
+        category: "frutas",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
+      },
+
+      {
+        id: 12,
+        title: "ACEITE PREMIER",
+        price: "$48,990",
+        img: "aceite_premier.png",
+        category: "frutas",
+        cant: 10,
+        description:
+          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
       },
     ],
     productoSeleccionado: {},
@@ -239,16 +294,24 @@ export default {
       }
     },
   },
-  created() {
-    if (this.$route.name == "categories") {
-      this.categories = true;
-    }
-  },
-  methods: {
-    clickCategoria(categoria) {
-      this.categoriaSeleccionada = categoria;
-      this.dialog = true;
-    },
-  },
 };
 </script>
+
+<style>
+.my-dialog {
+  position: fixed;
+  z-index: 9999;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 1500px;
+  height: 480px;
+}
+.my-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 520px;
+  max-width: 1700px;
+}
+</style>
