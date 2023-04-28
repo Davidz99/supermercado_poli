@@ -2,24 +2,15 @@
   <div class="home">
     <v-row class="text-center row" style="height: 250px">
       <v-col cols="12">
-        <label id="label_tienda">
-          Los mejores <br />
-          productos a tu <br />
-          alcance
-        </label>
+        <label id="label_tienda"> Los mejores <br /> productos a tu <br /> alcance </label>
         <v-img cover src="@/assets/tienda.jpg" style="height: 30%; width: 100%" />
       </v-col>
     </v-row>
 
     <v-row class="row" style="">
       <v-col cols="3">
-        <p>
-          Punto supermercado, el mejor lugar para comprar todo lo que necesitas.
-          <br />
-          <br />
-          Con más de diez años ofreciendo productos de calidad.
-          <br />
-          <br />
+        <p> Punto supermercado, el mejor lugar para comprar todo lo que necesitas. <br /> <br /> 
+            Con más de diez años ofreciendo productos de calidad. <br /> <br />
         </p>
 
         <v-btn to="store" style="color: green !important"> COMPRAR AHORA </v-btn>
@@ -41,8 +32,6 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 export default {
   name: "home_vue",
 };

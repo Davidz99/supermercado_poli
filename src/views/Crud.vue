@@ -16,7 +16,7 @@
       <v-row>
         <v-col cols="2">
           <v-btn
-            @click="init_producto = true"
+            @click="llamarProducto({ novedad: '7' })"
             height="55px"
             prepend-icon="mdi mdi-pencil-plus"
             width="100%"
@@ -52,10 +52,10 @@
             <td width="30%" class="text-center">
               <v-row>
                 <v-col cols="4" style="padding: 5px !important">
-                  <v-btn style="background-color: rgb(91 90 183); color: white" width="100%"> EDITAR </v-btn>
+                  <v-btn @click="llamarProducto({ novedad: '0', item })" style="background-color: rgb(91 90 183); color: white" width="100%"> EDITAR </v-btn>
                 </v-col>
                 <v-col cols="4" style="padding: 5px !important">
-                  <v-btn style="background-color: rgb(98, 153, 98); color: white" width="100%"> VER </v-btn>
+                  <v-btn @click="llamarProducto({ novedad: '0', item })" style="background-color: rgb(98, 153, 98); color: white" width="100%"> VER </v-btn>
                 </v-col>
                 <v-col cols="4" style="padding: 5px !important">
                   <v-btn style="background-color: #c0392b; color: white" width="100%"> BORRAR </v-btn>
@@ -68,7 +68,7 @@
     </v-col>
   </v-row>
 
-  <Product v-if="init_producto" :novedad_lnk="novedad" :producto_lnk="product" @callback="callbackProduct" />
+  <Product v-if="init_producto" :novedad_lnk="params_producto.novedad" :id_lnk="params_producto.id" :productos_lnk="productos" @callback="callbackProduct" />
 </template>
 
 <script>
@@ -98,8 +98,12 @@ export default {
     ],
     busqueda: "",
     init_producto: null,
-    novedad: null,
     producto: {},
+    params_producto: {
+      novedad: "",
+      id: null,
+      productos: [],
+    }
   }),
   components: {
     Product,
@@ -119,6 +123,16 @@ export default {
     },
   },
   methods: {
+    llamarProducto({ novedad = null, item = {} }) {
+      this.params_producto.novedad = novedad;
+      this.params_producto.id = ["0", "8"].includes(novedad) ? item.id : null;
+      this.params_producto.productos = this.productos;
+
+      console.log(this.params_producto.novedad, "params 1")
+      
+      setTimeout(() => this.init_producto = true, 200);
+    },
+
     callbackProduct() {
       this.init_producto = false;
     },
