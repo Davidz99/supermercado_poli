@@ -1,11 +1,18 @@
 const getObjProduct = () => {
   return {
-    id: "",
+    id: 0,
     nombre: "",
-    activo: "",
-    cantidad: "",
+    activo: false,
+    cantidad: 0,
+    precio: 0,
     proveedor: "",
+    foto: "",
+    categoria_1: "",
+    categoria_2: "",
+    categoria_3: "",
+    categoria_4: "",
+    categoria_5: "",
   };
 };
 
-export default getObjProduct
+export default getObjProduct;

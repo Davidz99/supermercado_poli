@@ -4,8 +4,8 @@
       <v-card>
         <v-layout>
           <v-navigation-drawer floating permanent>
-            <v-list v-for="item in categories" :key="item.id" density="compact" nav>
-              <v-list-item :title="item.nombre" :value="item.valor"></v-list-item>
+            <v-list v-for="item in categorias" :key="item.id" density="compact" nav>
+              <v-list-item :title="item.nombre" :value="item.id"></v-list-item>
             </v-list>
           </v-navigation-drawer>
           <v-main style="height: 340px"></v-main>
@@ -34,31 +34,45 @@
       <v-table fixed-header height="400px" class="mt-n6">
         <thead>
           <tr>
-            <th width="5%" class="text-left">Id</th>
-            <th width="25%" class="text-left">Nombre</th>
-            <th width="5%" class="text-center">Activo</th>
-            <th width="10%" class="text-center">Cantidad</th>
-            <th width="25%" class="text-left">Proveedor</th>
-            <th width="30%" class="text-center">Acciones</th>
+            <th width="2%" class="text-left">Id</th>
+            <th width="20%" class="text-left">Nombre</th>
+            <th width="25%" class="text-left">Descripción</th>
+            <th width="4%" class="text-center">Activo</th>
+            <th width="6%" class="text-center">Cantidad</th>
+            <th width="20%" class="text-left">Proveedor</th>
+            <th width="23%" class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="item in list_productos" :key="item.id">
-            <td width="5%" class="text-left">{{ item.id }}</td>
-            <td width="25%" class="text-left">{{ item.nombre }}</td>
-            <td width="5%" class="text-center">{{ item.activo }}</td>
-            <td width="10%" class="text-center">{{ item.cantidad }}</td>
-            <td width="25%" class="text-left">{{ item.proveedor }}</td>
-            <td width="30%" class="text-center">
+            <td width="2%" class="text-left">{{ item.id }}</td>
+            <td width="20%" class="text-left">{{ item.nombre }}</td>
+            <td width="25%" class="text-left">{{ item.descripcion }}</td>
+            <td width="4%" class="text-center">{{ item.activo == true ? "SI" : "NO" }}</td>
+            <td width="6%" class="text-center">{{ item.cantidad }}</td>
+            <td width="20%" class="text-left">{{ item.proveedor }}</td>
+            <td width="23%" class="text-center">
               <v-row>
                 <v-col cols="4" style="padding: 5px !important">
-                  <v-btn @click="llamarProducto({ novedad: '0', item })" style="background-color: rgb(91 90 183); color: white" width="100%"> EDITAR </v-btn>
+                  <v-btn
+                    @click="llamarProducto({ novedad: '0', item })"
+                    style="background-color: rgb(91 90 183); color: white; font-size: 10pt"
+                    width="100%"
+                  >
+                    EDITAR
+                  </v-btn>
                 </v-col>
                 <v-col cols="4" style="padding: 5px !important">
-                  <v-btn @click="llamarProducto({ novedad: '0', item })" style="background-color: rgb(98, 153, 98); color: white" width="100%"> VER </v-btn>
+                  <v-btn
+                    @click="llamarProducto({ novedad: '0', item })"
+                    style="background-color: rgb(98, 153, 98); color: white; font-size: 10pt"
+                    width="100%"
+                  >
+                    VER
+                  </v-btn>
                 </v-col>
                 <v-col cols="4" style="padding: 5px !important">
-                  <v-btn style="background-color: #c0392b; color: white" width="100%"> BORRAR </v-btn>
+                  <v-btn style="background-color: #c0392b; color: white; font-size: 10pt" width="100%"> BORRAR </v-btn>
                 </v-col>
               </v-row>
             </td>
@@ -68,34 +82,24 @@
     </v-col>
   </v-row>
 
-  <Product v-if="init_producto" :novedad_lnk="params_producto.novedad" :id_lnk="params_producto.id" :productos_lnk="productos" @callback="callbackProduct" />
+  <Product
+    v-if="init_producto"
+    :novedad_lnk="params_producto.novedad"
+    :id_lnk="params_producto.id"
+    :productos_lnk="productos"
+    @callback="callbackProduct"
+  />
 </template>
 
 <script>
 import Product from "../../src/components/Product.vue";
+import api from "../database/api.js";
 
 export default {
   name: "crud_vue",
   data: () => ({
-    productos: [
-      { id: "1", nombre: "Arroz castellano", activo: "SI", cantidad: "15", proveedor: "Jhon Restrepo", acciones: "" },
-      { id: "2", nombre: "Aceite Oliva", activo: "SI", cantidad: "500", proveedor: "Canola", acciones: "" },
-      { id: "3", nombre: "Pasta Spaggheti", activo: "SI", cantidad: "25", proveedor: "Prisma", acciones: "" },
-      { id: "4", nombre: "Frijoles Diana", activo: "SI", cantidad: "45", proveedor: "Casa blanca", acciones: "" },
-      { id: "5", nombre: "Avena Quaker", activo: "SI", cantidad: "13", proveedor: "Jhon Restrepo", acciones: "" },
-      { id: "6", nombre: "Aceite de agua", activo: "SI", cantidad: "8", proveedor: "Canola", acciones: "" },
-      { id: "7", nombre: "Lentejas Diana", activo: "SI", cantidad: "0", proveedor: "Conservas Doña Maria", acciones: "" },
-      { id: "8", nombre: "Harina Pan", activo: "SI", cantidad: "18", proveedor: "Casa blanca", acciones: "" },
-      { id: "9", nombre: "Canela Molida", activo: "SI", cantidad: "0", proveedor: "El molinillo", acciones: "" },
-    ],
-    categories: [
-      { nombre: "Despensa", valor: "despensa" },
-      { nombre: "Pollo, carnes y pescado", valor: "carnes" },
-      { nombre: "Frutas y verduras", valor: "frutas" },
-      { nombre: "Panaderia", valor: "panaderia" },
-      { nombre: "Vinos y licores", valor: "vinos" },
-      { nombre: "Pets food", valor: "pets_food" },
-    ],
+    productos: [],
+    categorias: [],
     busqueda: "",
     init_producto: null,
     producto: {},
@@ -103,38 +107,73 @@ export default {
       novedad: "",
       id: null,
       productos: [],
-    }
+    },
   }),
   components: {
     Product,
   },
+  async created() {
+    this.leerProductos();
+  },
   computed: {
     list_productos() {
       if (this.busqueda.length > 0) {
-        return this.productos.filter(
+        let data = this.productos.filter(
           (e) =>
             e.nombre.toUpperCase().includes(this.busqueda.toUpperCase()) ||
             e.id.includes(this.busqueda) ||
             e.proveedor.toUpperCase().includes(this.busqueda.toUpperCase())
         );
+
+        return this.organizeProducts(data);
       } else {
-        return this.productos;
+        console.log(this.organizeProducts(this.productos));
+
+        return this.organizeProducts(this.productos);
       }
     },
   },
   methods: {
+    async leerProductos() {
+      try {
+        this.productos = await api.getProductos();
+        this.leerCategorias();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
+    async leerCategorias() {
+      try {
+        this.categorias = await api.getCategorias();
+        // this.leerCategorias();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
     llamarProducto({ novedad = null, item = {} }) {
       this.params_producto.novedad = novedad;
-      this.params_producto.id = ["0", "8"].includes(novedad) ? item.id : null;
+
+      if (novedad == 7) {
+        this.params_producto.id = this.productos.length + 1;
+      } else {
+        this.params_producto.id = item.id;
+      }
+
       this.params_producto.productos = this.productos;
 
-      console.log(this.params_producto.novedad, "params 1")
-      
-      setTimeout(() => this.init_producto = true, 200);
+      setTimeout(() => (this.init_producto = true), 200);
     },
 
     callbackProduct() {
       this.init_producto = false;
+    },
+
+    organizeProducts(productos) {
+      return productos.sort((a, b) => {
+          return a.id - b.id;
+        });
     },
   },
 };
@@ -143,5 +182,10 @@ export default {
 <style>
 thead tr th {
   color: rgb(98, 153, 98) !important;
+  font-size: 11pt;
+}
+
+tbody tr td {
+  font-size: 11pt;
 }
 </style>
