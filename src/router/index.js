@@ -31,6 +31,12 @@ const routes = [
     name: 'crud',
     component: () => import(/* webpackChunkName: "crud" */ '../views/Crud.vue')
   },
+  {
+    path: '/ShoppingCart',
+    name: 'ShoppingCart',
+    component: () => import(/* webpackChunkName: "ShoppingCart" */ '../views/ShoppingCart.vue')
+  },
+  
 ]
 
 const router = createRouter({

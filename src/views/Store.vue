@@ -1,22 +1,24 @@
-<style scoped>
-  .producto{
-    text-align: center;
-  }
-</style>
+
 <template>
   <v-card style="overflow-y: auto !important" variant="text" elevation="0" max-height="500">
 
-    <h2 align="center" class="ma-5" style="color: green padding: 7px background-color: white">Productos</h2>
+    <h2 align="center" class="ma-5" style="color: green padding: 7px background-color: white">Productos
+    <v-icon>mdi-cart</v-icon>({{a}})
+    <v-btn @click="navegateTo('ShoppingCart')">Ver Carrito</v-btn>
+  
+  </h2>
+          
 
     <v-row class="mt-n6 pa-5" id="contenedor_productos">
-      <v-col v-for="fila in array_productos" :key="fila" cols="2" class="vino">
+      <v-col v-for="producto in productos" :key="producto.id" cols="2" class="vino">
         <v-card border style="font-size: 10px" class="mb-2 producto" density="compact" variant="text" elevation="3">
-          <v-img :src="require(`@/assets/${fila.img}`)" height="140"></v-img>
+          <!--<v-img :src="require(`@/assets/${fila.img}`)" height="140"></v-img>-->
 
-          <v-card-title style="font-size: 14px"> {{ fila.title }} </v-card-title>
-          <v-card-text style="font-size: 15pt"> {{ fila.price }} </v-card-text>
+          <v-card-title style="font-size: 14px"> {{ producto.nombre }} </v-card-title>
+          <v-card-text style="font-size: 15pt"> {{ producto.precio }} </v-card-text>
 
-          <v-btn class="mt-n2" block color="green" variant="text">AÑADIR AL CARRITO</v-btn>
+          <v-btn @click="agregarProductosCarrito(producto)" class="mt-n2" block color="green" variant="text">AÑADIR AL
+            CARRITO</v-btn>
         </v-card>
       </v-col>
     </v-row>
@@ -25,30 +27,48 @@
 
 
 <script>
+
+
+import cart from "../main.js";
+import api from "../database/api";
 export default {
   name: "store_vue",
   data: () => ({
+    a:"",
     categories: null,
     categoriaSeleccionada: null,
     dialog: false,
 
     // productos base de datos
-    array_productos: [
-    { title: "VINO LABRUSCO", price: "$500,000", img: "vino_tinto_labrusco.jpg", category: "vino" },
-      { title: "VINO CASA BLANCA", price: "$120,000", img: "vino_casa_blanca.png", category: "vino" },
-      { title: "VINO SIETE SOLES", price: "$1.250,000", img: "vino_siete_soles.jpg", category: "vino"},
-      { title: "VINO 120", price: "$100,000", img: "vino_120.jpg", category: "vino" },
-      { title: "VINO SANTA HELENA", price: "$200,000", img: "vino_santa_helena.png", category: "vino" },
-      { title: "SUAVIZANTE", price: "$20,000", img: "suavizante.jpg", category: "aseo"},
-      { title: "CLORO", price: "$12,000", img: "cloro_magia_blanca.jpg", category: "aseo" },
-      { title: "DESINFECTANTE", price: "$10,000", img: "desinfectante_fabuloso_lavanda_galon.jpg", category: "aseo" },
-      { title: "JAVON", price: "$25,000", img: "javon_liquido.jpg", category: "aseo" },
-      { title: "PASTA DORIA", price: "$5,000", img: "pasta_doria.png", category: "despensa" },
-      { title: "AVENA QUAKER", price: "$10,700", img: "avena_quaker.png", category: "despensa" },
-      { title: "ACEITE PREMIER", price: "$48,990", img: "aceite_premier.png", category: "despensa" },
-    ],
+    productos: [],
+    productosEnCarrito: [],
   }),
-  
+/* Cargar productos desde la BD */
+  created() {
+    api.getProductos().then((productos) => {
+      this.productos = productos;
+    }).catch((error) => {
+      console.error(error);
+    });
+  },
+
+  methods: {
+    agregarProductosCarrito(producto) {
+      //this.productosEnCarrito.push(producto)
+      cart.push(producto)
+      this.a = cart.length
+      console.log(cart)
+    },
+    navegateTo(path){
+      this.$router.push(path);
+    }
+  }
 
 };
 </script>
+
+<style scoped>
+  .producto{
+    text-align: center;
+  }
+</style>
