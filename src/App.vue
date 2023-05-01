@@ -11,7 +11,6 @@
 <script>
 import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
-import api from "./database/api";
 
 export default {
   name: "App",
@@ -19,31 +18,6 @@ export default {
   components: {
     Header,
     Footer,
-  },
-
-  created() {
-    this.leerCategorias();
-  },
-
-  methods: {
-    async leerCategorias() {
-      try {
-        let categorias = await api.getCategorias();
-        console.log(categorias, "categorias");
-        this.leerProductos();
-      } catch (err) {
-        console.error(err);
-      }
-    },
-
-    async leerProductos() {
-      try {
-        let productos = await api.getProductos();
-        console.log(productos, "productos");
-      } catch (err) {
-        console.error(err);
-      }
-    },
   },
 };
 </script>
