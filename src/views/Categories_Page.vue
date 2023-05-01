@@ -8,14 +8,14 @@
     <v-navigation-drawer floating permanent>
       <v-list dense nav>
         <v-list-item
-          @click="categoriaSeleccionada = 'despensa'"
+          @click="categoriaSeleccionada = 'Despensa'"
           prepend-icon="mdi-barley"
           title="Despensa"
           value="despensa"
         ></v-list-item>
         <v-divider></v-divider>
         <v-list-item
-          @click="categoriaSeleccionada = 'carnes'"
+          @click="categoriaSeleccionada = 'Pollo, carnes y pescado'"
           prepend-icon="mdi mdi-cow"
           title="Carnes, Pollo y Pescado"
           value="carnes"
@@ -35,7 +35,7 @@
         ></v-list-item>
         <v-divider></v-divider>
         <v-list-item
-          @click="categoriaSeleccionada = 'vino'"
+          @click="categoriaSeleccionada = 'Vinos y licores'"
           prepend-icon="mdi-glass-wine"
           title="Vinos"
           value="vino"
@@ -65,56 +65,73 @@
       </v-list>
     </v-navigation-drawer>
 
+    <h2
+      align="center"
+      class="ma-5"
+      style="color: green padding: 7px background-color: white"
+    >
+      Productos <v-icon>mdi-cart</v-icon>({{ a }})
+      <v-btn @click="navegateTo('ShoppingCart')">Ver Carrito</v-btn>
+    </h2>
+
     <v-row class="mt-n6 pa-5" id="contenedor_productos">
       <v-col
-        v-for="fila in productosFiltrados"
-        :key="fila"
-        cols="4"
+        v-for="producto in productosFiltrados"
+        :key="producto.id"
+        cols="5"
         class="vino"
       >
         <v-card
           border
           style="font-size: 10px"
-          class="mb-2"
+          class="mb-2 producto"
           density="compact"
           variant="text"
           elevation="3"
         >
+          <!--<v-img :src="require(`@/assets/${fila.img}`)" height="140"></v-img>-->
           <v-img
-            :src="require(`@/assets/${fila.img}`)"
+            :src="producto.foto"
             height="140"
-            style="cursor: pointer;"
+            style="cursor: pointer"
             @click="
-              productoSeleccionado = fila;
+              productoSeleccionado = producto;
               dialog = true;
             "
           ></v-img>
           <v-card-title style="font-size: 14px">
-            {{ fila.title }}
+            {{ producto.nombre }}
           </v-card-title>
-          <v-card-text style="font-size: 15pt"> {{ fila.price }} </v-card-text>
-          <v-btn class="mt-n2" block color="green" variant="text"
+          <v-card-text style="font-size: 15pt">
+            {{ producto.precio }}
+          </v-card-text>
+
+          <v-btn
+            @click="agregarProductosCarrito(producto)"
+            class="mt-n2"
+            block
+            color="green"
+            variant="text"
             >AÑADIR AL CARRITO</v-btn
           >
         </v-card>
       </v-col>
+      <v-col
+        v-if="productos.length % 3 !== 0"
+        :cols="12 - (productos.length % 3) * 4 + 'px'"
+        class="offset-md-1"
+      ></v-col>
     </v-row>
 
     <!-- V-DIALOG DE CADA PRODUCTO -->
     <v-dialog v-model="dialog" class="my-dialog">
       <v-card class="my-card">
         <v-card-title class="text-center">
-          {{ productoSeleccionado.title }}
+          {{ productoSeleccionado.nombre }}
         </v-card-title>
-        <v-card-subtitle>{{ productoSeleccionado.price }}</v-card-subtitle>
-        <v-card-text>
-          <v-img
-            :src="require(`@/assets/${productoSeleccionado.img}`)"
-            width="300px"
-            height="200px"
-          />
-          {{ productoSeleccionado.description }}
-        </v-card-text>
+        <v-card-subtitle>{{ productoSeleccionado.precio }}</v-card-subtitle>
+        <v-img :src="productoSeleccionado.foto" height="140" width="120"></v-img>
+        <v-text-field> {{ productoSeleccionado.descripcion }}</v-text-field>
         <v-btn class="mt-n2" block color="green" variant="text"
           >AÑADIR AL CARRITO</v-btn
         >
@@ -130,168 +147,54 @@
 </template>
 
 <script>
+import api from "../database/api";
+import cart from "../main.js";
 export default {
   name: "categories_vue",
   data: () => ({
+    a: "",
     categories: null,
     categoriaSeleccionada: null,
     dialog: false,
 
     // productos base de datos
-    array_productos: [
-      {
-        id: 1,
-        title: "VINO SABROSO",
-        price: "$200,000",
-        img: "vino_santa_helena.png",
-        category: "vino",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 2,
-        title: "VINO SANTA HELENA",
-        price: "$200,000",
-        img: "vino_santa_helena.png",
-        category: "vino",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 3,
-        title: "VINO SANTA HELENA",
-        price: "$200,000",
-        img: "vino_santa_helena.png",
-        category: "vino",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 4,
-        title: "VINO SANTA HELENA",
-        price: "$200,000",
-        img: "vino_santa_helena.png",
-        category: "vino",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 5,
-        title: "VINO SANTA HELENA",
-        price: "$200,000",
-        img: "vino_santa_helena.png",
-        category: "vino",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 6,
-        title: "VINO SANTA HELENA",
-        price: "$200,000",
-        img: "vino_santa_helena.png",
-        category: "vino",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 7,
-        title: "VINO CASA BLANCA",
-        price: "$170,000",
-        img: "vino_casa_blanca.png",
-        cant: 10,
-        category: "vino",
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 8,
-        title: "VINO CASA BLANCA",
-        price: "$170,000",
-        img: "vino_casa_blanca.png",
-        category: "vino",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 9,
-        title: "ARROZ DIANA",
-        price: "$12,000",
-        img: "arrozCatellano.png",
-        category: "despensa",
-        cant: 10,
-        description: "El arroz es un producto bueno",
-      },
-      {
-        id: 10,
-        title: "PASTA DORIA",
-        price: "$5,000",
-        img: "pasta_doria.png",
-        category: "despensa",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 11,
-        title: "AVENA QUAKER",
-        price: "$10,700",
-        img: "avena_quaker.png",
-        category: "despensa",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 12,
-        title: "ACEITE PREMIER",
-        price: "$48,990",
-        img: "aceite_premier.png",
-        category: "despensa",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-      {
-        id: 13,
-        title: "ACEITE PREMIER",
-        price: "$48,990",
-        img: "aceite_premier.png",
-        category: "frutas",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-
-      {
-        id: 12,
-        title: "ACEITE PREMIER",
-        price: "$48,990",
-        img: "aceite_premier.png",
-        category: "frutas",
-        cant: 10,
-        description:
-          "Este es el espacio de descripción, este información se cargará desde el CRUD e irá conectado con la base de datos, aquí se describirán brevemente las propiedades del producto",
-      },
-    ],
+    // productos base de datos
+    productos: [],
+    productosEnCarrito: [],
     productoSeleccionado: {},
   }),
+  /* Cargar productos desde la BD */
+  created() {
+    api
+      .getProductos()
+      .then((productos) => {
+        this.productos = productos;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  },
 
   computed: {
     productosFiltrados() {
       if (this.categoriaSeleccionada) {
-        return this.array_productos.filter(
-          (producto) => producto.category === this.categoriaSeleccionada
+        return this.productos.filter(
+          (producto) => producto.categoria_1 === this.categoriaSeleccionada
         );
       } else {
-        return this.array_productos;
+        return this.productos;
       }
+    },
+  },
+  methods: {
+    agregarProductosCarrito(producto) {
+      //this.productosEnCarrito.push(producto)
+      cart.push(producto);
+      this.a = cart.length;
+      console.log(cart);
+    },
+    navegateTo(path) {
+      this.$router.push(path);
     },
   },
 };
@@ -313,5 +216,8 @@ export default {
   align-items: center;
   height: 520px;
   max-width: 1700px;
+}
+.producto {
+  text-align: center;
 }
 </style>
