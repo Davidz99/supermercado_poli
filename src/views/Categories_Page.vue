@@ -165,6 +165,7 @@ export default {
   }),
   /* Cargar productos desde la BD */
   created() {
+    this.a = cart.length;
     api
       .getProductos()
       .then((productos) => {
