@@ -46,6 +46,7 @@
               </v-col>
               <v-col cols="6" class="my-n2 pa-0 pl-2">
                 <v-file-input
+                  @change="convertImg"
                   v-model="files"
                   :rules="rules"
                   accept="image/png, image/jpeg, image/bmp"
@@ -59,7 +60,7 @@
         </v-card-text>
         <v-card-actions class="mt-n4">
           <v-spacer></v-spacer>
-          <v-btn color="green" variant="text" @click="salir"> CERRAR </v-btn>
+          <v-btn color="green" variant="text" @click="terminar"> CERRAR </v-btn>
           <v-btn color="green" variant="text" @click="evaluarAccion"> GUARDAR </v-btn>
         </v-card-actions>
       </v-card>
@@ -69,9 +70,44 @@
       {{ alert.msj }}
 
       <template v-slot:actions>
-        <v-btn color="green" variant="text" @click="snackbar = false"> Close </v-btn>
+        <v-btn color="green" variant="text" @click="alert.show = false"> Close </v-btn>
       </template>
     </v-snackbar>
+  </v-row>
+
+  <!-- Confirmacion de borrado  -->
+  <v-row justify="center" v-if="novedad_lnk == 9">
+    <v-dialog v-model="borrar_producto" persistent width="auto">
+      <template v-slot:activator="{ props }">
+        <v-btn color="green" v-bind="props"> Borrar Producto </v-btn>
+      </template>
+      <v-card>
+        <v-card-title class="text-h5"> Esta seguro de borrar el producto? </v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="red-darken-1"
+            variant="text"
+            @click="
+              borrar_producto = false;
+              terminar();
+            "
+          >
+            Cancelar
+          </v-btn>
+          <v-btn
+            color="green-darken-1"
+            variant="text"
+            @click="
+              borrar_producto = false;
+              borrarItem();
+            "
+          >
+            Aceptar
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-row>
 </template>
 
@@ -105,9 +141,16 @@ export default {
       msj: "",
     },
     files: [],
+    borrar_producto: null,
   }),
   created() {
-    this.leerProductos();
+    // Borra el producto - novedad 9
+    if (this.novedad_lnk == 9) {
+      this.dialog = false;
+      this.borrar_producto = true;
+    } else {
+      this.leerProductos();
+    }
   },
   methods: {
     async leerProductos() {
@@ -136,22 +179,38 @@ export default {
       try {
         api.agregarProducto(this.producto);
         setTimeout(() => (this.dialog = false), 300);
+        this.mostrarAlerta({ type: "success", msj: "Producto creado!" });
       } catch (err) {
         console.error(err);
-        this.mostrarAlerta({ type: "warning", msj: "Error prueba" });
+        this.mostrarAlerta({ type: "warning", msj: "Error creando producto" });
       }
     },
 
-    actualizarItem() {},
+    actualizarItem() {
+      try {
+        api.actualizarProducto(this.producto);
+        setTimeout(() => (this.dialog = false), 300);
+        this.mostrarAlerta({ type: "success", msj: "Producto actualizado!" });
+      } catch (err) {
+        console.error(err);
+        this.mostrarAlerta({ type: "warning", msj: "Error actualizando producto" });
+      }
+    },
 
-    salir() {
-      this.dialog = false;
-      this.$emit("callback");
+    borrarItem() {
+      try {
+        api.removerProducto(this.id_lnk);
+        this.mostrarAlerta({ type: "success", msj: "Producto borrado!" });
+      } catch (err) {
+        console.error(err);
+        this.mostrarAlerta({ type: "warning", msj: "Error borrando producto" });
+      }
     },
 
     terminar() {
       this.dialog = false;
-      this.$emit("callback", this.productos_lnk);
+      this.$emit("callback");
+      setTimeout(() => location.reload(), 200);
     },
 
     mostrarAlerta({ type = "", msj = "" } = {}) {
@@ -159,15 +218,15 @@ export default {
       this.alert.show = true;
       this.alert.msj = msj || "Error";
 
-      setTimeout(() => (this.alert.show = false), 3000);
+      setTimeout(() => {
+        this.alert.show = false;
+        this.terminar();
+      }, 1000);
     },
 
     async convertImg() {
-      // console.log(files)
-      // console.log("llega");
-      // console.log(this.files);
-      // let base64 = await api.toDataURL(this.files[0]);
-      // console.log(base64);
+      let base64 = await api.toDataURL(this.files[0]);
+      this.producto.foto = base64;
     },
   },
 };

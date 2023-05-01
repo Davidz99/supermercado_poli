@@ -4,8 +4,12 @@
       <v-card>
         <v-layout>
           <v-navigation-drawer floating permanent>
-            <v-list v-for="item in categorias" :key="item.id" density="compact" nav>
-              <v-list-item :title="item.nombre" :value="item.id"></v-list-item>
+            <v-list density="compact" nav dense>
+              <v-list-item @click="categoria_selec = item.nombre" v-for="(item, index) in categorias" :key="index">
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.nombre }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
             </v-list>
           </v-navigation-drawer>
           <v-main style="height: 340px"></v-main>
@@ -47,7 +51,7 @@
           <tr v-for="item in list_productos" :key="item.id">
             <td width="2%" class="text-left">{{ item.id }}</td>
             <td width="20%" class="text-left">{{ item.nombre }}</td>
-            <td width="25%" class="text-left">{{ item.descripcion }}</td>
+            <td width="25%" class="text-left">{{ item.descripcion.slice(0, 60) }}</td>
             <td width="4%" class="text-center">{{ item.activo == true ? "SI" : "NO" }}</td>
             <td width="6%" class="text-center">{{ item.cantidad }}</td>
             <td width="20%" class="text-left">{{ item.proveedor }}</td>
@@ -55,7 +59,7 @@
               <v-row>
                 <v-col cols="4" style="padding: 5px !important">
                   <v-btn
-                    @click="llamarProducto({ novedad: '0', item })"
+                    @click="llamarProducto({ novedad: '8', item })"
                     style="background-color: rgb(91 90 183); color: white; font-size: 10pt"
                     width="100%"
                   >
@@ -63,16 +67,18 @@
                   </v-btn>
                 </v-col>
                 <v-col cols="4" style="padding: 5px !important">
-                  <v-btn
-                    @click="llamarProducto({ novedad: '0', item })"
-                    style="background-color: rgb(98, 153, 98); color: white; font-size: 10pt"
-                    width="100%"
-                  >
+                  <v-btn @click="mostrarProducto({ item })" style="background-color: rgb(98, 153, 98); color: white; font-size: 10pt" width="100%">
                     VER
                   </v-btn>
                 </v-col>
                 <v-col cols="4" style="padding: 5px !important">
-                  <v-btn style="background-color: #c0392b; color: white; font-size: 10pt" width="100%"> BORRAR </v-btn>
+                  <v-btn
+                    @click="llamarProducto({ novedad: '9', item })"
+                    style="background-color: #c0392b; color: white; font-size: 10pt"
+                    width="100%"
+                  >
+                    BORRAR
+                  </v-btn>
                 </v-col>
               </v-row>
             </td>
@@ -89,10 +95,13 @@
     :productos_lnk="productos"
     @callback="callbackProduct"
   />
+
+  <ShowProduct v-if="init_show_producto" :producto="producto_seleccionado" @callback="callbackShowProduct" />
 </template>
 
 <script>
-import Product from "../../src/components/Product.vue";
+import Product from "../components/Product.vue";
+import ShowProduct from "../components/ShowProduct.vue";
 import api from "../database/api.js";
 
 export default {
@@ -102,34 +111,45 @@ export default {
     categorias: [],
     busqueda: "",
     init_producto: null,
-    producto: {},
     params_producto: {
       novedad: "",
       id: null,
-      productos: [],
     },
+    categoria_selec: null,
+    id_item: 0,
+    init_show_producto: null,
+    producto_seleccionado: null,
   }),
   components: {
     Product,
+    ShowProduct,
   },
   async created() {
     this.leerProductos();
   },
   computed: {
     list_productos() {
-      if (this.busqueda.length > 0) {
-        let data = this.productos.filter(
-          (e) =>
-            e.nombre.toUpperCase().includes(this.busqueda.toUpperCase()) ||
-            e.id.includes(this.busqueda) ||
-            e.proveedor.toUpperCase().includes(this.busqueda.toUpperCase())
+      let productos = this.productos;
+
+      // validacion de categorias
+      if (this.categoria_selec) {
+        productos = productos.filter((e) =>
+          [
+            e.categoria_1.toUpperCase(),
+            e.categoria_2.toUpperCase(),
+            e.categoria_3.toUpperCase(),
+            e.categoria_4.toUpperCase(),
+            e.categoria_5.toUpperCase(),
+          ].includes(this.categoria_selec.toUpperCase())
         );
+      }
 
-        return this.organizeProducts(data);
+      if (this.busqueda.length > 0) {
+        return productos.filter(
+          (e) => e.nombre.toUpperCase().includes(this.busqueda.toUpperCase()) || e.proveedor.toUpperCase().includes(this.busqueda.toUpperCase())
+        );
       } else {
-        console.log(this.organizeProducts(this.productos));
-
-        return this.organizeProducts(this.productos);
+        return this.organizeProducts(productos);
       }
     },
   },
@@ -156,12 +176,10 @@ export default {
       this.params_producto.novedad = novedad;
 
       if (novedad == 7) {
-        this.params_producto.id = this.productos.length + 1;
+        this.params_producto.id = null;
       } else {
         this.params_producto.id = item.id;
       }
-
-      this.params_producto.productos = this.productos;
 
       setTimeout(() => (this.init_producto = true), 200);
     },
@@ -170,10 +188,19 @@ export default {
       this.init_producto = false;
     },
 
+    mostrarProducto({ item = {} }) {
+      this.producto_seleccionado = item;
+      setTimeout(() => (this.init_show_producto = true), 200);
+    },
+
+    callbackShowProduct() {
+      this.init_show_producto = false;
+    },
+
     organizeProducts(productos) {
       return productos.sort((a, b) => {
-          return a.id - b.id;
-        });
+        return a.id - b.id;
+      });
     },
   },
 };

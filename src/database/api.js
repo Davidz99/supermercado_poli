@@ -3,6 +3,8 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 
+import { doc, setDoc } from "firebase/firestore";
+
 const app = firebase.initializeApp(config);
 const db = app.firestore();
 
@@ -68,10 +70,10 @@ const agregarProducto = async (registro) => {
     try {
       const productos = db.collection("productos");
 
-      productos.add({
+      setDoc(doc(productos, registro.id.toString()), {
         id: parseInt(registro.id),
         nombre: registro.nombre,
-        descripcion: registro.nombre,
+        descripcion: registro.descripcion,
         activo: registro.activo,
         cantidad: parseInt(registro.cantidad),
         precio: parseInt(registro.precio),
@@ -82,7 +84,7 @@ const agregarProducto = async (registro) => {
         categoria_3: registro.categoria_3,
         categoria_4: registro.categoria_4,
         categoria_5: registro.categoria_5,
-      })
+      });
 
       resolve(true);
     } catch (err) {
@@ -97,10 +99,10 @@ const actualizarProducto = async (registro) => {
     try {
       const productos = db.collection("productos");
 
-      productos.doc(registro.id).set({
+      productos.doc(registro.id.toString()).set({
         id: parseInt(registro.id),
         nombre: registro.nombre,
-        descripcion: registro.nombre,
+        descripcion: registro.descripcion,
         activo: registro.activo,
         cantidad: parseInt(registro.cantidad),
         precio: parseInt(registro.precio),
@@ -111,7 +113,7 @@ const actualizarProducto = async (registro) => {
         categoria_3: registro.categoria_3,
         categoria_4: registro.categoria_4,
         categoria_5: registro.categoria_5,
-      })
+      });
 
       resolve(true);
     } catch (err) {
@@ -121,26 +123,14 @@ const actualizarProducto = async (registro) => {
   });
 };
 
-const removerProducto = async (registro) => {
+const removerProducto = async (id) => {
   return new Promise((resolve, reject) => {
     try {
       const productos = db.collection("productos");
 
-      productos.doc(registro.id).delete({
-        id: parseInt(registro.id),
-        nombre: registro.nombre,
-        descripcion: registro.nombre,
-        activo: registro.activo,
-        cantidad: parseInt(registro.cantidad),
-        precio: parseInt(registro.precio),
-        proveedor: registro.proveedor,
-        foto: registro.foto,
-        categoria_1: registro.categoria_1,
-        categoria_2: registro.categoria_2,
-        categoria_3: registro.categoria_3,
-        categoria_4: registro.categoria_4,
-        categoria_5: registro.categoria_5,
-      })
+      productos.doc(id.toString()).delete({
+        id: parseInt(id),
+      });
 
       resolve(true);
     } catch (err) {
@@ -151,20 +141,15 @@ const removerProducto = async (registro) => {
 };
 
 const toDataURL = (url) => {
-  return new Promise((resolve) => {
-    var xhr = new XMLHttpRequest();
-    xhr.onload = function() {
-      var reader = new FileReader();
-      reader.onloadend = function() {
-        resolve(reader.result);
-      }
-      reader.readAsDataURL(xhr.response);
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(url);
+    reader.onload = () => {
+      resolve(reader.result);
     };
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.send();
-  }) 
-}
+    reader.onerror = (error) => reject(error);
+  });
+};
 
 export default {
   getCategorias,
@@ -173,5 +158,5 @@ export default {
   agregarProducto,
   actualizarProducto,
   removerProducto,
-  toDataURL
+  toDataURL,
 };
