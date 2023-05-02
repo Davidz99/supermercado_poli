@@ -21,14 +21,14 @@
           value="carnes"
         ></v-list-item>
         <v-list-item
-          @click="categoriaSeleccionada = 'frutas'"
+          @click="categoriaSeleccionada = 'Frutas y verduras'"
           prepend-icon="mdi-food-apple"
           title="Frutas y Verduras"
           value="frutas"
         ></v-list-item>
         <v-divider></v-divider>
         <v-list-item
-          @click="categoriaSeleccionada = 'panaderia'"
+          @click="categoriaSeleccionada = 'Panadería'"
           prepend-icon="mdi mdi-baguette"
           title="Panadería"
           value="panaderia"
@@ -42,7 +42,7 @@
         ></v-list-item>
         <v-divider></v-divider>
         <v-list-item
-          @click="categoriaSeleccionada = 'pets'"
+          @click="categoriaSeleccionada = 'Pets'"
           prepend-icon="mdi mdi-dog"
           title="Pets"
           value="pets"
@@ -56,7 +56,7 @@
         ></v-list-item>
         <v-divider></v-divider>
         <v-list-item
-          @click="categoriaSeleccionada = 'aseo'"
+          @click="categoriaSeleccionada = 'Aseo'"
           prepend-icon="mdi-spray-bottle"
           title="Aseo"
           value="aseo"
@@ -96,7 +96,7 @@
             style="cursor: pointer"
             @click="
               productoSeleccionado = producto;
-              dialog = true;
+              init_show_producto = true;
             "
           ></v-img>
           <v-card-title style="font-size: 14px">
@@ -123,41 +123,23 @@
       ></v-col>
     </v-row>
 
-    <!-- V-DIALOG DE CADA PRODUCTO -->
-    <v-dialog v-model="dialog" class="my-dialog">
-      <v-card class="my-card">
-        <v-card-title class="text-center">
-          {{ productoSeleccionado.nombre }}
-        </v-card-title>
-        <v-card-subtitle>{{ productoSeleccionado.precio }}</v-card-subtitle>
+    <ShowProduct v-if="init_show_producto" :producto="productoSeleccionado" @callback="callbackShowProduct" />
 
-        <v-img :src="productoSeleccionado.foto" height="140" width="120"></v-img>
-
-        {{ productoSeleccionado.descripcion }}
-        <v-btn class="mt-n2" block color="green" variant="text"
-          >AÑADIR AL CARRITO</v-btn
-        >
-      </v-card>
-      <v-card height="10%">
-        <!--Boton de cierre de dialog-->
-        <v-card-actions>
-          <v-btn color="red" text @click="dialog = false"> Cerrar </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-card>
 </template>
 
 <script>
 import api from "../database/api";
 import cart from "../main.js";
+import ShowProduct from "../components/ShowProduct.vue";
+
 export default {
   name: "categories_vue",
   data: () => ({
     a: "",
     categories: null,
     categoriaSeleccionada: null,
-    dialog: false,
+    init_show_producto: false,
 
     // productos base de datos
     // productos base de datos
@@ -165,6 +147,9 @@ export default {
     productosEnCarrito: [],
     productoSeleccionado: {},
   }),
+  components: {
+    ShowProduct,
+  },
   /* Cargar productos desde la BD */
   created() {
     api
@@ -198,27 +183,15 @@ export default {
     navegateTo(path) {
       this.$router.push(path);
     },
+    callbackShowProduct() {
+      this.init_show_producto = false;
+      this.a = cart.length;
+    }
   },
 };
 </script>
 
 <style>
-.my-dialog {
-  position: fixed;
-  z-index: 9999;
-  top: 70%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 1500px;
-  height: 480px;
-}
-.my-card {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 520px;
-  max-width: 1700px;
-}
 .producto {
   text-align: center;
 }

@@ -5,15 +5,9 @@
     <v-row class="mt-n6 pa-5" id="contenedor_productos">
     <v-col v-for="producto in productosCargados" :key="producto.id" cols="2" class="vino">
         <v-card border style="font-size: 10px" class="mb-2 producto" density="compact" variant="text" elevation="3">
-        <v-img
-            :src="producto.foto"
-            height="140"
-            style="cursor: pointer;"
-            @click="
-            productoSeleccionado = fila;
-            dialog = true;
-            "
-        ></v-img>
+
+        <v-img :src="producto.foto" height="140"></v-img>
+
 
         <v-card-title style="font-size: 14px"> {{ producto.nombre }} </v-card-title>
         <v-card-text style="font-size: 15pt"> {{ producto.precio }} </v-card-text>

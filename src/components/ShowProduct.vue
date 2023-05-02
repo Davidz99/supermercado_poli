@@ -31,6 +31,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
+          <v-btn v-if="$route.name != 'crud'" color="green-darken-1" variant="text" @click="añadirCarrito"> Añadir al carrito </v-btn>
           <v-btn color="green-darken-1" variant="text" @click="salir"> Continuar </v-btn>
         </v-card-actions>
       </v-card>
@@ -40,6 +41,7 @@
 
 <script>
 import getObjProduct from "./reg_product.js";
+import cart from "../main.js";
 
 export default {
   name: "show_product_vue",
@@ -59,6 +61,16 @@ export default {
       this.dialog = false;
       this.$emit("callback");
     },
+
+    añadirCarrito() {
+      cart.push(this.producto);
+      this.a = cart.length;
+      
+      setTimeout(() => {
+        this.dialog = false;
+        this.$emit("callback");
+      }, 100);
+    }
   },
 };
 </script>
