@@ -130,8 +130,10 @@
           {{ productoSeleccionado.nombre }}
         </v-card-title>
         <v-card-subtitle>{{ productoSeleccionado.precio }}</v-card-subtitle>
+
         <v-img :src="productoSeleccionado.foto" height="140" width="120"></v-img>
-        <v-text-field> {{ productoSeleccionado.descripcion }}</v-text-field>
+
+        {{ productoSeleccionado.descripcion }}
         <v-btn class="mt-n2" block color="green" variant="text"
           >AÑADIR AL CARRITO</v-btn
         >
@@ -165,7 +167,6 @@ export default {
   }),
   /* Cargar productos desde la BD */
   created() {
-    this.a = cart.length;
     api
       .getProductos()
       .then((productos) => {

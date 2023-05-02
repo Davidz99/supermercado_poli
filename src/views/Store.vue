@@ -31,6 +31,27 @@
       </v-col>
       <v-col v-if="(productos.length % 3) !== 0" :cols="(12 - ((productos.length % 3) * 4)) + 'px'" class="offset-md-1"></v-col>
     </v-row>
+
+    <!-- V-DIALOG DE CADA PRODUCTO -->
+    <v-dialog v-model="dialog" class="my-dialog">
+      <v-card class="my-card">
+        <v-card-title class="text-center">
+          {{ productoSeleccionado.nombre }}
+        </v-card-title>
+        <v-card-subtitle>{{ productoSeleccionado.precio }}</v-card-subtitle>
+        <v-img :src="productoSeleccionado.foto" height="140" width="120"></v-img>
+        <v-text-field> {{ productoSeleccionado.descripcion }}</v-text-field>
+        <v-btn class="mt-n2" block color="green" variant="text"
+          >AÑADIR AL CARRITO</v-btn
+        >
+      </v-card>
+      <v-card height="10%">
+        <!--Boton de cierre de dialog-->
+        <v-card-actions>
+          <v-btn color="red" text @click="dialog = false"> Cerrar </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -51,6 +72,7 @@ export default {
     // productos base de datos
     productos: [],
     productosEnCarrito: [],
+    productoSeleccionado: {},
   }),
 /* Cargar productos desde la BD */
   created() {
@@ -61,6 +83,7 @@ export default {
       console.error(error);
     });
   },
+
 
   methods: {
     agregarProductosCarrito(producto) {
@@ -73,6 +96,8 @@ export default {
       this.$router.push(path);
     }
   }
+
+  
 
 };
 </script>
