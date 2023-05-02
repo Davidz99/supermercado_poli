@@ -18,8 +18,8 @@
             height="140"
             style="cursor: pointer;"
             @click="
-              productoSeleccionado = fila;
-              dialog = true;
+              productoSeleccionado = producto;
+              init_show_producto = true;
             "
           ></v-img>
           <v-card-title style="font-size: 14px"> {{ producto.nombre }} </v-card-title>
@@ -32,6 +32,8 @@
       <v-col v-if="(productos.length % 3) !== 0" :cols="(12 - ((productos.length % 3) * 4)) + 'px'" class="offset-md-1"></v-col>
     </v-row>
   </v-card>
+
+  <ShowProduct v-if="init_show_producto" :producto="productoSeleccionado" @callback="callbackShowProduct" />
 </template>
 
 
@@ -40,17 +42,20 @@
 
 import cart from "../main.js";
 import api from "../database/api";
+import ShowProduct from "../components/ShowProduct.vue";
+
 export default {
   name: "store_vue",
   data: () => ({
     a:"",
     categories: null,
     categoriaSeleccionada: null,
-    dialog: false,
+    init_show_producto: false,
 
     // productos base de datos
     productos: [],
     productosEnCarrito: [],
+    productoSeleccionado: {}
   }),
 /* Cargar productos desde la BD */
   created() {
@@ -60,6 +65,9 @@ export default {
     }).catch((error) => {
       console.error(error);
     });
+  },
+  components: {
+    ShowProduct,
   },
 
   methods: {
@@ -71,6 +79,10 @@ export default {
     },
     navegateTo(path){
       this.$router.push(path);
+    },
+    callbackShowProduct() {
+      this.init_show_producto = false;
+      this.a = cart.length;
     }
   }
 
