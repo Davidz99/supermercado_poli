@@ -175,7 +175,7 @@ export default {
     llamarProducto({ novedad = null, item = {} }) {
       this.params_producto.novedad = novedad;
 
-      if (novedad == 7) {
+      if (novedad == 30) {
         this.params_producto.id = null;
       } else {
         this.params_producto.id = item.id;

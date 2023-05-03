@@ -142,7 +142,6 @@ export default {
     init_show_producto: false,
 
     // productos base de datos
-    // productos base de datos
     productos: [],
     productosEnCarrito: [],
     productoSeleccionado: {},

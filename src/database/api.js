@@ -65,13 +65,24 @@ const getProductos = async () => {
   });
 };
 
+
+const evaluarId = (productos) => {
+	let secuencia = 0;
+    while (secuencia < productos.length + 1) {
+      secuencia ++;
+      if (!productos.find(e => e.id == secuencia)) {
+        return secuencia;
+      }
+    }
+}
+
 const agregarProducto = async (registro) => {
   return new Promise((resolve, reject) => {
     try {
       const productos = db.collection("productos");
 
       setDoc(doc(productos, registro.id.toString()), {
-        id: parseInt(registro.id),
+        id: parseInt(registro.id), 
         nombre: registro.nombre,
         descripcion: registro.descripcion,
         activo: registro.activo,
@@ -159,4 +170,5 @@ export default {
   actualizarProducto,
   removerProducto,
   toDataURL,
+  evaluarId,
 };

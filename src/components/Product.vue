@@ -164,7 +164,7 @@ export default {
 
     evaluarNovedad() {
       if (this.novedad_lnk == 7) {
-        this.producto.id = this.productos.length + 1;
+        this.producto.id = api.evaluarId(this.productos);
       } else {
         this.producto = this.productos.find((e) => e.id == this.id_lnk);
       }
